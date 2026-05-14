@@ -1,0 +1,10 @@
+{
+    "emmet.triggerExpansionOnTab": true,
+    "editor.tabCompletion": "on",
+    "emmet.includeLanguages": {
+        "javascript": "javascriptreact",
+        "typescript": "typescriptreact",
+        "javascriptreact": "html",
+        "typescriptreact": "html"
+    }
+}

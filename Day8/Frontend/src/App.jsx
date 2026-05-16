@@ -23,7 +23,7 @@ const App = () => {
   ])
    console.log("okoko");
   function fetchNotes(){
-    axios.get("http://localhost:3000/api/notes")
+    axios.get("https://backend-learning-1yrb.onrender.com/api/notes")
   .then(res=>{
     setNotes(res.data.notes);
   })}
@@ -35,14 +35,14 @@ const App = () => {
     e.preventDefault();
     const title = e.target.title.value;
     const description = e.target.description.value;
-    axios.post("http://localhost:3000/api/notes",{
+    axios.post("https://backend-learning-1yrb.onrender.com/api/notes",{
       title,
       description
     }).then(res=>{
     fetchNotes();
   })}
   function handleDelete(id){
-    axios.delete("http://localhost:3000/api/notes/" + id)
+      axios.delete("https://backend-learning-1yrb.onrender.com/api/notes/" + id)
     .then(res=>{
     fetchNotes();
   })
@@ -50,7 +50,7 @@ const App = () => {
   function handleUpdate(id){
     const title = prompt("Enter new title");
     const description = prompt("Enter new description");
-    axios.put("http://localhost:3000/api/notes/" + id,{
+    axios.put("https://backend-learning-1yrb.onrender.com/api/notes/" + id,{
       title,
       description
     }).then(res=>{

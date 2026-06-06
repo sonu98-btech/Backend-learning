@@ -1,4 +1,5 @@
 const userModel = require("../model/user.model");
+const likeModel = require("../model/like.model");
 const jwt = require("jsonwebtoken");
 const { get } = require("mongoose");
 const postModel = require("../model/post.model");
@@ -34,9 +35,15 @@ const createPost = async (req, res) => {
 };
 // Get All Posts
 const getAllPosts = async (req, res) => {
-  userId = req.user.id;
+  const userId = req.user?.id;
+  if (!userId) {
+    return res.status(401).json({
+      message: "Unauthorized",
+    });
+  }
+
   const posts = await postModel.find({ user: userId });
-  if (!posts) {
+  if (!posts || posts.length === 0) {
     return res.status(404).json({
       message: "Posts not found",
     });
@@ -60,10 +67,42 @@ const getPostById = async (req, res) => {
     post: post,
   });
 };
+// Get feed posts
+const getFeedPosts = async (req, res) => {
+  const userId = req.user?.id;
+  if (!userId) {
+    return res.status(401).json({
+      message: "Unauthorized",
+    });
+  }
 
+  const rawPosts = await postModel
+    .find()
+    .populate("user")
+    .sort({ _id: -1 })
+    .lean();
+  const posts = await Promise.all(
+    rawPosts.map(async (post) => {
+      const isLiked = await likeModel.findOne({
+        post: post._id,
+        user: userId,
+      });
+      return {
+        ...post,
+        isLiked: !!isLiked,
+      };
+    }),
+  );
+
+  res.status(200).json({
+    message: "Feed posts retrieved successfully",
+    posts,
+  });
+};
 
 module.exports = {
   createPost,
   getAllPosts,
-  getPostById
+  getPostById,
+  getFeedPosts,
 };

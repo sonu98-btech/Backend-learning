@@ -1,15 +1,22 @@
-const express = require('express');
+const express = require("express");
 const postRouter = express.Router();
-const bcrypt = require('bcrypt');
-const IdentifyUser = require('../middleware/IdentifyUser');
-const postController = require('../controllers/postcontroller');
-const multer = require('multer');
+const bcrypt = require("bcrypt");
+const IdentifyUser = require("../middleware/IdentifyUser");
+const postController = require("../controllers/postcontroller");
+const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 
 //Create Post
-postRouter.post("/",  upload.single('image'), IdentifyUser, postController.createPost);
+postRouter.post(
+  "/",
+  upload.single("image"),
+  IdentifyUser,
+  postController.createPost,
+);
 // Get All Posts
 postRouter.get("/", IdentifyUser, postController.getAllPosts);
+//get feed posts
+postRouter.get("/feed", IdentifyUser, postController.getFeedPosts);
 //Get Post by Id
 postRouter.get("/:id", IdentifyUser, postController.getPostById);
 

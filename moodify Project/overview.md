@@ -1,9 +1,11 @@
 # Moodify Project Overview
 
 ## Project Summary
+
 Moodify is a full-stack web application that detects the user’s facial expression, maps it to a mood, and plays a song from the backend database that matches that mood. It includes user authentication, a protected home page, webcam-based emotion detection, and an audio player with playback controls.
 
 ## What We Built
+
 - A React + Vite frontend with authentication pages for register and login.
 - A protected home page that is only accessible after successful login.
 - A facial expression detection component using MediaPipe Tasks Vision and Face API logic to determine mood from webcam input.
@@ -14,6 +16,7 @@ Moodify is a full-stack web application that detects the user’s facial express
 - A responsive audio player interface with play/pause, seek, volume, replay, and speed controls.
 
 ## Key Features
+
 - User registration and login
 - Protected application routes
 - Mood-based song selection
@@ -24,6 +27,7 @@ Moodify is a full-stack web application that detects the user’s facial express
 - Song uploads that read ID3 tags for title and cover art
 
 ## Frontend Technologies
+
 - React 19
 - Vite
 - React Router
@@ -33,6 +37,7 @@ Moodify is a full-stack web application that detects the user’s facial express
 - Context API for authentication and song state management
 
 ## Backend Technologies
+
 - Node.js and Express
 - MongoDB with Mongoose
 - dotenv for environment configuration
@@ -46,6 +51,7 @@ Moodify is a full-stack web application that detects the user’s facial express
 - ioredis for Redis connection and token blacklisting
 
 ## Project Structure
+
 - `Backend/`
   - `server.js` — bootstraps Express and database connection
   - `src/app.js` — middleware, routes, CORS, JSON parsing
@@ -66,6 +72,7 @@ Moodify is a full-stack web application that detects the user’s facial express
   - `src/features/shared/` — global styles and shared UI assets
 
 ## What Was Implemented
+
 - Register and login flows that create users and issue JWT cookies
 - Protected route handling for the main home screen
 - Mood detection from webcam and sending mood to the backend with `GET /api/song?mood=` request
@@ -75,6 +82,7 @@ Moodify is a full-stack web application that detects the user’s facial express
 - Frontend player that consumes the returned song and plays audio with UI controls
 
 ## Topics Used
+
 - Full-stack web development
 - REST API design
 - Authentication and authorization
@@ -87,6 +95,7 @@ Moodify is a full-stack web application that detects the user’s facial express
 - Context API for global state management
 
 ## Notes
+
 - The backend serves the API at `http://localhost:3000`.
 - The frontend is configured to run on `http://localhost:5173`.
 - The mood-based song endpoint now returns a random song when multiple songs have the same mood.

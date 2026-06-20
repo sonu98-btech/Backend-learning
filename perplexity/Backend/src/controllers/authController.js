@@ -3,6 +3,12 @@ import  {sendEmail}  from "../services/mail.services.js"
 import jwt from "jsonwebtoken"
 export const registerController = async (req,res)=>{
     const {username,email,password} = req.body
+        console.log("BODY =>", req.body);
+
+
+    console.log("USERNAME =>", username);
+    console.log("EMAIL =>", email);
+    console.log("PASSWORD =>", password);
 
 
     const isAlreadyExist = await userModel.findOne({
@@ -83,7 +89,12 @@ export const verifyMailController = async (req,res)=>{
 
 //login controller
 export const loginController = async (req,res)=>{
+        console.log("BODY =>", req.body);
+
     const {email,password} = req.body
+
+    console.log("EMAIL =>", email);
+    console.log("PASSWORD =>", password);
     const user = await userModel.findOne({email}).select("+password")
     if(!user){
         return res.status(400).json({
@@ -117,7 +128,7 @@ export const loginController = async (req,res)=>{
     res.status(200).json({
         message:"Login successful",
         success:true,
-        token
+        user
     })
 }
 

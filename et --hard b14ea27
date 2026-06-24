@@ -1,0 +1,27 @@
+[33mb14ea27[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m feat: implement chat functionality with Redux integration and UI enhancements
+[33m29d9f48[m feat: integrate Mistral AI model and implement chat functionality
+[33m880dc7f[m feat: initialize frontend with React, Redux, and Tailwind CSS
+[33m79fb1e0[m initial commit
+[33ma6c4dc3[m Setup Google OAuth email service
+[33mcce0f09[m socket.io initial commit
+[33m3c98dc3[m initial commit
+[33m7ee4a31[m fix dist folder
+[33m33d3981[m dist folder
+[33md061fee[m dist folder
+[33m43aea43[m completed
+[33m59c2778[m completed
+[33mcb3324e[m insta-clone Auth
+[33m5e5dd5e[m Authentication
+[33m640ded7[m integrate post api
+[33m71afd75[m done
+[33m4810b85[m Insta Clone backend login and registration
+[33m75d086e[m user authentication
+[33mc52aac6[m bcrypt
+[33m2d0fb87[m JWT
+[33mcd752ae[m Security
+[33mb44aaf2[m ugrade api with render url
+[33m4340829[m Frontend and backend deployment
+[33m1b19cfe[m Fronted With backend
+[33mc39f017[m Day6
+[33m0ac4a27[m Done
+[33m2e98607[m first commit

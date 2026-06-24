@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   Plus,
   MessageSquare,
@@ -17,6 +19,7 @@ import {
   ThumbsDown,
   CheckCheck,
   ArrowDown,
+  Square
 } from "lucide-react";
 import { usechat } from "../hooks/usechat";
 import { setCurrentChatId, setMessages } from "../chat.slice";
@@ -25,6 +28,7 @@ const Dashboard = () => {
   const chats = useSelector((state) => state.chat.chats);
   const messages = useSelector((state) => state.chat.messages);
   const currentChatId = useSelector((state) => state.chat.currentChatId);
+  const IsGenerating = useSelector((state) => state.chat.IsGenerating)
   const dispatch = useDispatch();
   const messagesEndRef = useRef(null);
 
@@ -49,8 +53,9 @@ const Dashboard = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     if (!input.trim()) return;
-    await handleSendMessage(input);
+    const msg = input
     setInput("");
+    await handleSendMessage(msg);
   }
 
   function handleNewChat() {
@@ -105,16 +110,14 @@ const Dashboard = () => {
               <button
                 key={chat._id}
                 onClick={() => handleGetMessages(chat._id)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors group ${
-                  active
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors group ${active
                     ? "bg-indigo-500/10 border-l-2 border-indigo-400"
                     : "hover:bg-white/5 border-l-2 border-transparent"
-                }`}
+                  }`}
               >
                 <MessageSquare
-                  className={`w-4 h-4 shrink-0 ${
-                    active ? "text-indigo-300" : "text-zinc-500"
-                  }`}
+                  className={`w-4 h-4 shrink-0 ${active ? "text-indigo-300" : "text-zinc-500"
+                    }`}
                 />
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-medium truncate">
@@ -186,7 +189,9 @@ const Dashboard = () => {
                   <div className="flex-1 max-w-[85%]">
                     <div className="bg-[#13131c] border border-white/5 rounded-2xl rounded-tl-sm px-5 py-4">
                       <p className="text-[15px] whitespace-pre-wrap leading-relaxed text-zinc-100">
-                        {message.content}
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {message.content}
+                        </ReactMarkdown>
                       </p>
                       <div className="flex items-center justify-between mt-3 pt-1">
                         <span className="text-xs text-zinc-500">
@@ -259,7 +264,7 @@ const Dashboard = () => {
                   className="w-10 h-10 rounded-xl bg-indigo-500 hover:bg-indigo-400 transition-colors flex items-center justify-center shadow-lg shadow-indigo-500/20 disabled:opacity-50"
                   disabled={!input.trim()}
                 >
-                  <Send className="w-4 h-4" />
+                  {IsGenerating ? <Square className="w-4 h-4" /> : <Send className="w-4 h-4" />}
                 </button>
               </div>
             </form>

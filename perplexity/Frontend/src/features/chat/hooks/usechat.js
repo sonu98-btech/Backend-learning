@@ -12,7 +12,8 @@ import {
   setError,
   setMessages,
   addMessage,
-  addChat
+  addChat,
+  setIsGenerating
 } from "../chat.slice.js";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -70,11 +71,12 @@ export const usechat = () => {
                     content: message,
                 })
             );
+      dispatch(setIsGenerating(true))
       const data = await sendMessage({
         message,
         chatId: currentChatId,
       });
-
+      dispatch(setIsGenerating(false))
       console.log(data);
       if(data.chat){
         dispatch(addChat(data.chat))

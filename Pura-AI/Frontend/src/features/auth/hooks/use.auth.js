@@ -10,7 +10,9 @@ export const useAuth = () => {
       dispatch(setLoading(true));
       const data = await register(username, email, password);
     } catch (err) {
-      dispatch(setError(err.response.data.message || "Registration failed"));
+      const errorMessage =
+        err?.response?.data?.message || err?.message || "Registration failed";
+      dispatch(setError(errorMessage));
     } finally {
       dispatch(setLoading(false));
     }
@@ -21,7 +23,9 @@ export const useAuth = () => {
       const data = await login(email, password);
       dispatch(setUser(data.user));
     } catch (err) {
-      dispatch(setError(err.response.data.message || "Login failed"));
+      const errorMessage =
+        err?.response?.data?.message || err?.message || "Login failed";
+      dispatch(setError(errorMessage));
     } finally {
       dispatch(setLoading(false));
     }
@@ -33,7 +37,9 @@ export const useAuth = () => {
 
       dispatch(setUser(data.user));
     } catch (err) {
-      dispatch(setError(err.response.data.message || "Failed to fetch user"));
+      const errorMessage =
+        err?.response?.data?.message || err?.message || "Failed to fetch user";
+      dispatch(setError(errorMessage));
     } finally {
       dispatch(setLoading(false));
     }
@@ -43,10 +49,12 @@ export const useAuth = () => {
       dispatch(setLoading(true));
       const data = await logout();
       dispatch(setUser(null));
-      dispatch(setCurrentChatId(null))
-      dispatch(setMessages([]))
+      dispatch(setCurrentChatId(null));
+      dispatch(setMessages([]));
     } catch (err) {
-      dispatch(setError(err.response.data.message || "Failed to fetch user"));
+      const errorMessage =
+        err?.response?.data?.message || err?.message || "Logout failed";
+      dispatch(setError(errorMessage));
     } finally {
       dispatch(setLoading(false));
     }

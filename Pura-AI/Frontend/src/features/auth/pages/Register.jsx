@@ -14,7 +14,7 @@ const Register = () => {
   const navigate = useNavigate()
 
   const user = useSelector((state) => state.auth.user)
-  const loading = useSelector((state) => state.auth.loadin)
+  const loading = useSelector((state) => state.auth.loading)
 
   const submitForm = async (event) => {
     event.preventDefault()

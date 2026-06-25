@@ -9,10 +9,17 @@ const app = express()
 
 
 app.use(express.json())
-app.use(cors({
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.FRONTEND_URL,
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
     credentials: true,
-    origin: "http://localhost:5173"
-}))
+  })
+);
 app.use(morgan('dev'))
 app.use(cookieParser())
 

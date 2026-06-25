@@ -1,13 +1,14 @@
 import axios from 'axios'
-
+import dotenv from "dotenv"
+dotenv.config()
 
 const api = axios.create({
-    baseURL: "http://localhost:3000/api/auth",
+    baseURL: import.meta.env.VITE_API_URL,
     withCredentials: true
-})
+});
 
 export const register = async (username, email, password) => {
-    const response = await api.post("/register", {
+    const response = await api.post("api/auth/register", {
         username,
         email,
         password
@@ -16,18 +17,18 @@ export const register = async (username, email, password) => {
 }
 
 export const login = async (email, password) => {
-    const response = await api.post("/login", {
+    const response = await api.post("api/auth/login", {
         email,
         password
     })
     return response.data
 }
 export const getMe = async () => {  
-    const response = await api.get("/get-me")
+    const response = await api.get("api/auth/get-me")
     return response.data
 }
 
 export const logout = async()=>{
-    const response = await api.post('/logout')
+    const response = await api.post('api/auth/logout')
     return response.data
 }

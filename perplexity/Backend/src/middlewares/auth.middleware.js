@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken"
 import userModel from "../models/user.model.js"
+import redis from "../config/cache/cache.js"
 
 export const authMiddleware = async (req,res,next)=>{
     const {token} = req.cookies
@@ -8,6 +9,14 @@ export const authMiddleware = async (req,res,next)=>{
             message:"Token is required",
             success:false,
             err:"Token is required"
+        })
+    }
+    const isTokenBlacklisted = await redis.get(token)
+    if(isTokenBlacklisted){
+         return res.status(401).json({
+            message:"Token is blacklisted",
+            success:false,
+            err:"Token is blacklisted"
         })
     }
     try {

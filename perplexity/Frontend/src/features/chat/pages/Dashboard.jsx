@@ -19,10 +19,14 @@ import {
   ThumbsDown,
   CheckCheck,
   ArrowDown,
-  Square
+  Square,
+  MoreVertical,
+  Trash2 
 } from "lucide-react";
 import { usechat } from "../hooks/usechat";
+import { useAuth } from "../../auth/hooks/use.auth"; 
 import { setCurrentChatId, setMessages } from "../chat.slice";
+import { useNavigate,Navigate } from "react-router";
 
 const Dashboard = () => {
   const chats = useSelector((state) => state.chat.chats);
@@ -31,6 +35,7 @@ const Dashboard = () => {
   const IsGenerating = useSelector((state) => state.chat.IsGenerating)
   const dispatch = useDispatch();
   const messagesEndRef = useRef(null);
+  const navigate = useNavigate()
 
   const [input, setInput] = useState("");
   const {
@@ -38,7 +43,18 @@ const Dashboard = () => {
     handleGetChats,
     handleGetMessages,
     handleSendMessage,
+    handleDeleteChat
   } = usechat();
+
+  // handleLogout
+ const {handleLogout} = useAuth()
+ async function clickLogout(){
+   await handleLogout();
+   console.log("Logout successful");
+   navigate("/login")
+
+ }
+
 
   useEffect(() => {
     initializeSocketConnection();
@@ -46,10 +62,13 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+
+  //handle Submit
   async function handleSubmit(e) {
     e.preventDefault();
     if (!input.trim()) return;
@@ -58,6 +77,8 @@ const Dashboard = () => {
     await handleSendMessage(msg);
   }
 
+
+  //hanle New chat
   function handleNewChat() {
     dispatch(setCurrentChatId(null));
     dispatch(setMessages([]));
@@ -73,6 +94,32 @@ const Dashboard = () => {
       minute: "2-digit",
     });
 
+
+    function getChatDateLabel(createdAt) {
+  const today = new Date();
+  const chatDate = new Date(createdAt);
+
+  today.setHours(0, 0, 0, 0);
+  chatDate.setHours(0, 0, 0, 0);
+
+  const diffDays = Math.floor(
+    (today - chatDate) / (1000 * 60 * 60 * 24)
+  );
+
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "Yesterday";
+  if (diffDays <= 7) return "Previous 7 Days";
+  if (diffDays <= 30) return "Previous 30 Days";
+
+  return chatDate.toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "short",
+    year:
+      chatDate.getFullYear() !== today.getFullYear()
+        ? "numeric"
+        : undefined,
+  });
+}
   return (
     <div className="h-screen w-screen bg-[#0a0a0f] text-white flex overflow-hidden font-sans">
       {/* Sidebar */}
@@ -104,33 +151,48 @@ const Dashboard = () => {
           Recent Chats
         </div>
         <div className="flex-1 overflow-y-auto px-3 space-y-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          {reversedChats.map((chat) => {
-            const active = chat._id === currentChatId;
-            return (
-              <button
-                key={chat._id}
-                onClick={() => handleGetMessages(chat._id)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors group ${active
-                    ? "bg-indigo-500/10 border-l-2 border-indigo-400"
-                    : "hover:bg-white/5 border-l-2 border-transparent"
-                  }`}
-              >
-                <MessageSquare
-                  className={`w-4 h-4 shrink-0 ${active ? "text-indigo-300" : "text-zinc-500"
-                    }`}
-                />
-                <div className="min-w-0 flex-1">
-                  <div className="text-sm font-medium truncate">
-                    {chat.title}
-                  </div>
-                  <div className="text-xs text-zinc-500 truncate">
-                    {chat.subtitle || "Today"}
-                  </div>
-                </div>
-              </button>
-            );
-          })}
+  {reversedChats.map((chat) => {
+    const active = chat._id === currentChatId;
+
+    return (
+      <button
+        key={chat._id}
+        onClick={() => handleGetMessages(chat._id)}
+        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors group ${
+          active
+            ? "bg-indigo-500/10 border-l-2 border-indigo-400"
+            : "hover:bg-white/5 border-l-2 border-transparent"
+        }`}
+      >
+        <MessageSquare
+          className={`w-4 h-4 shrink-0 ${
+            active ? "text-indigo-300" : "text-zinc-500"
+          }`}
+        />
+
+        <div className="min-w-0 flex-1">
+          <div className="text-sm font-medium truncate">
+            {chat.title}
+          </div>
+
+          <div className="text-xs text-zinc-500 truncate">
+            {getChatDateLabel(chat.createdAt)}
+          </div>
         </div>
+
+        {/* Delete Button */}
+        <Trash2
+          size={16}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent opening the chat
+            handleDeleteChat(chat._id);
+          }}
+          className="opacity-0 group-hover:opacity-100 text-zinc-500 hover:text-red-500 transition-all duration-200 shrink-0"
+        />
+      </button>
+    );
+  })}
+</div>
 
         {/* Footer */}
         <div className="border-t border-white/5 px-3 py-4 space-y-1">
@@ -138,8 +200,8 @@ const Dashboard = () => {
             <Settings className="w-4 h-4" />
             Settings
           </button>
-          <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm text-zinc-300">
-            <LogOut className="w-4 h-4" />
+          <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 text-sm text-zinc-300" onClick={clickLogout}>
+            <LogOut className="w-4 h-4"  />
             Sign out
           </button>
         </div>
@@ -151,15 +213,10 @@ const Dashboard = () => {
         <header className="h-16 px-8 flex items-center justify-between border-b border-white/5">
           <button className="flex items-center gap-2 text-base font-medium hover:text-indigo-300 transition-colors">
             {activeTitle}
-            <ChevronDown className="w-4 h-4 text-zinc-500" />
           </button>
           <div className="flex items-center gap-2">
-            <button className="w-9 h-9 rounded-lg hover:bg-white/5 flex items-center justify-center text-zinc-400">
-              <Search className="w-4 h-4" />
-            </button>
-            <button className="w-9 h-9 rounded-lg hover:bg-white/5 flex items-center justify-center text-zinc-400">
-              <Bookmark className="w-4 h-4" />
-            </button>
+           
+          
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 ml-2" />
           </div>
         </header>

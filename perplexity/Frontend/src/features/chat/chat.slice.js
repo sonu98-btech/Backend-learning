@@ -32,10 +32,17 @@ export const chatSlice = createSlice({
         },
         setIsGenerating:(state,action)=>{
             state.IsGenerating=action.payload
-        }
+        },
+        updateLastAIMessage: (state, action) => {
+    const lastMessage = state.messages[state.messages.length - 1];
+
+    if (lastMessage && lastMessage.role === "ai") {
+        lastMessage.content += action.payload;
+    }
+},
 
     }
 
 })
-    export const{setChats,setCurrentChatId,setLoading,setError,setMessages,addMessage,addChat,setIsGenerating} =chatSlice.actions
+    export const{setChats,setCurrentChatId,setLoading,setError,setMessages,addMessage,addChat,setIsGenerating,updateLastAIMessage} =chatSlice.actions
     export default chatSlice.reducer

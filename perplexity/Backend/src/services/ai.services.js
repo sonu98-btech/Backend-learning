@@ -18,6 +18,38 @@ const mistralModel = new ChatMistralAI({
   apiKey: process.env.MISTRAL_API_KEY,
 });
 
+// check need of internet
+async function shouldSearchInternet(question) {
+  const response = await mistralModel.invoke([
+    new SystemMessage(`
+You are a classifier.
+
+Your job is to decide whether answering the user's question requires searching the internet.
+
+Reply ONLY with:
+
+YES
+or
+NO
+
+Search the internet if the question asks about:
+- Latest news
+- Current events
+- Live scores
+- Today's weather
+- Stock prices
+- Cryptocurrency prices
+- Recent AI updates
+- Anything after your knowledge cutoff
+
+Otherwise reply NO.
+    `),
+
+    new HumanMessage(question),
+  ]);
+
+  return response.text.trim().toUpperCase() === "YES";
+}
 //tool
 
 const searchInternetTool = tool(
@@ -75,3 +107,49 @@ export const generateTitle = async (message) => {
 
 
 export default model;
+
+
+// streaming 
+export async function generateResponseStream(messages) {
+
+    const latestMessage = messages[messages.length - 1].content;
+
+    const shouldSearch = await shouldSearchInternet(latestMessage);
+
+    let prompt = [...messages];
+
+    if (shouldSearch) {
+
+        const searchResults = await tavilySearch({
+            query: latestMessage,
+        });
+
+        prompt.push({
+            role: "user",
+            content: `
+Here are the latest search results from the internet:
+
+${searchResults}
+
+Answer the user's question using these search results.
+            `,
+        });
+
+    }
+
+    const stream = await mistralModel.stream(
+        prompt.map((msg) => {
+
+            if (msg.role === "user") {
+                return new HumanMessage(msg.content);
+            }
+
+            if (msg.role === "ai") {
+                return new AIMessage(msg.content);
+            }
+
+        })
+    );
+
+    return stream;
+}

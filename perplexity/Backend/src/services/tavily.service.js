@@ -18,6 +18,8 @@ export async function tavilySearch({ query }) {
     } catch (err) {
         console.error("Tavily Error:", err);
 
-        return JSON.stringify(result)
+        return JSON.stringify({
+        error: "Failed to search internet."
+    });
     }
 }

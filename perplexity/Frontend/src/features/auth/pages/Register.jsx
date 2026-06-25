@@ -21,7 +21,7 @@ const Register = () => {
     try {
       setSubmitting(true)
       await handleRegister(username, email, password)
-      navigate('/login')
+      navigate('/verify-email')
     } finally {
       setSubmitting(false)
     }

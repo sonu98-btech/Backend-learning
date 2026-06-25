@@ -39,7 +39,7 @@ export const registerController = async (req, res) => {
     html: `<h1>Welcome to Perplexity</h1>
         <p>Hi ${username},</p>
         <p>Click the link below to verify your email address:</p>
-        <a href="http://localhost:3000/api/auth/verify-mail?token=${token}">Verify Email</a>
+        <a href="/api/auth/verify-mail?token=${token}">Verify Email</a>
         <p>Thank you for joining us!</p>`,
   });
   res.status(201).json({

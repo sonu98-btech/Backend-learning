@@ -10,8 +10,7 @@ const app = express()
 
 
 app.use(express.json())
-const allowedOrigins = [
-  "http://localhost:5173",
+const allowedOrigins = [  ,
   process.env.FRONTEND_URL,
 ];
 

@@ -33,7 +33,7 @@ export async function sendMessageStream({
   onDone,
 }) {
   const response = await fetch(
-    "http://localhost:3000/api/chats/message-stream",
+    "/api/chats/message-stream",
     {
       method: "POST",
       credentials: "include",

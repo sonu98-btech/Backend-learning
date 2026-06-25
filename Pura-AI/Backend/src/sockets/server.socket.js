@@ -1,9 +1,11 @@
+import dotenv from "dotenv"
+dotenv.config()
 import { Server } from "socket.io";
 let io;
 export function initSocket(httpServer) {
   io = new Server(httpServer, {
     cors: {
-      origin: "http://localhost:5173",
+      origin: process.env.FRONTEND_URL,
       credentials: true,
     },
   });

@@ -2,8 +2,8 @@ import redis from "../config/cache/cache.js";
 import userModel from "../models/user.model.js";
 import { sendEmail } from "../services/mail.services.js";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv"
-dotenv.config()
+import dotenv from "dotenv";
+dotenv.config();
 export const registerController = async (req, res) => {
   const { username, email, password } = req.body;
   console.log("BODY =>", req.body);
@@ -33,15 +33,30 @@ export const registerController = async (req, res) => {
     },
     process.env.JWT_SECRET,
   );
-  await sendEmail({
-    to: email,
-    subject: "Welcome to Perplexity",
-    html: `<h1>Welcome to Perplexity</h1>
-        <p>Hi ${username},</p>
-        <p>Click the link below to verify your email address:</p>
-        <a href="/api/auth/verify-mail?token=${token}">Verify Email</a>
-        <p>Thank you for joining us!</p>`,
-  });
+
+  try {
+    const backendUrl = process.env.BACKEND_URL || "http://localhost:3000";
+    const verificationUrl = `${backendUrl}/api/auth/verify-mail?token=${token}`;
+
+    await sendEmail({
+      to: email,
+      subject: "Welcome to Perplexity",
+      html: `<h1>Welcome to Perplexity</h1>
+          <p>Hi ${username},</p>
+          <p>Click the link below to verify your email address:</p>
+          <a href="${verificationUrl}">Verify Email</a>
+          <p>Thank you for joining us!</p>`,
+    });
+    console.log("Verification email sent successfully to:", email);
+  } catch (emailError) {
+    console.error("Failed to send verification email:", emailError);
+    return res.status(500).json({
+      message: "User registered but email could not be sent",
+      success: false,
+      err: emailError.message,
+    });
+  }
+
   res.status(201).json({
     message: "User registered successfully",
     success: true,

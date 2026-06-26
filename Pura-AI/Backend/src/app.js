@@ -6,6 +6,7 @@ import morgan from "morgan"
 import chatRouter from "./routes/chat.routes.js"
 import path from "path";
 import { fileURLToPath } from "url";
+import { transporter } from "./services/mail.services.js"
 const app = express()
 
 

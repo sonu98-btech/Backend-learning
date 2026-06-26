@@ -33,6 +33,17 @@ app.use("/api/auth",AuthRouter)
 app.use("/api/chats",chatRouter)
 app.use(express.static(path.join(__dirname, "../dist")));
 
+/// testing
+app.get("/smtp-test", async (req, res) => {
+  try {
+    await transporter.verify();
+    res.send("SMTP OK");
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
+
 app.get("/{*splat}", (req, res) => {
     res.sendFile(path.join(__dirname, "../dist/index.html"));
 });

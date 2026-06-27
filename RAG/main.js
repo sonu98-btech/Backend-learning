@@ -53,4 +53,3 @@ const result = await index.upsert({
 
 console.log(result)
 
--

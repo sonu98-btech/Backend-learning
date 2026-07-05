@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+/* Design System: Obsidian Nexus custom variables */
+:root {
+  --color-bg: #0a0a0c;
+  --color-surface: #0d1515;
+  --color-surface-container: #192122;
+  --color-surface-container-high: #232b2c;
+  --color-on-surface: #dce4e4;
+  --color-on-surface-variant: #b9cacb;
+  --color-neon-blue: #00f2ff;
+  --color-neon-purple: #b600f8;
+  --color-border-glow: rgba(0, 242, 255, 0.15);
+  --color-border-glow-purple: rgba(182, 0, 248, 0.15);
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-on-surface);
+  overflow-x: hidden;
+}
+
+/* Glassmorphism containers */
+.glass-card {
+  background: rgba(21, 29, 30, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card-hover:hover {
+  background: rgba(21, 29, 30, 0.55);
+  border-color: rgba(0, 242, 255, 0.25);
+  box-shadow: 0 0 25px rgba(0, 242, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+/* Neon glow utility classes */
+.neon-glow {
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+}
+
+.neon-glow-intense {
+  box-shadow: 0 0 30px rgba(0, 242, 255, 0.35);
+}
+
+.neon-glow-secondary {
+  box-shadow: 0 0 20px rgba(182, 0, 248, 0.2);
+}
+
+.neon-text-cyan {
+  text-shadow: 0 0 10px rgba(0, 242, 255, 0.6);
+}
+
+.neon-text-purple {
+  text-shadow: 0 0 10px rgba(182, 0, 248, 0.6);
+}
+
+/* Custom Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2e3637;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neon-blue);
+}
+
+/* Layout utilities */
+.font-headline {
+  font-family: 'Sora', sans-serif;
+}
+
+.font-code {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Custom Syntax Highlighting Styles inside Code Blocks */
+.code-keyword {
+  color: #ebb2ff;
+  font-weight: 500;
+}
+
+.code-function {
+  color: #74f5ff;
+}
+
+.code-string {
+  color: #ffb4ab;
+}
+
+.code-comment {
+  color: #849495;
+  font-style: italic;
+}
+
+.code-number {
+  color: #f8d8ff;
+}
+
+.code-class {
+  color: #74f5ff;
+  font-weight: 600;
+}
+
+.code-operator {
+  color: #00f2ff;
+}
+
+.code-builtin {
+  color: #ebb2ff;
+}
+
+/* Custom Pulsing Keyframes */
+@keyframes neonPulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+  }
+  50% {
+    opacity: 0.6;
+    box-shadow: 0 0 5px rgba(0, 242, 255, 0.1);
+  }
+}
+
+.animate-neon-pulse {
+  animation: neonPulse 2s infinite ease-in-out;
+}

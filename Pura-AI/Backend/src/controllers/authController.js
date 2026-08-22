@@ -6,11 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 export const registerController = async (req, res) => {
   const { username, email, password } = req.body;
-  console.log("BODY =>", req.body);
 
-  console.log("USERNAME =>", username);
-  console.log("EMAIL =>", email);
-  console.log("PASSWORD =>", password);
 
   const isAlreadyExist = await userModel.findOne({
     $or: [{ username }, { email }],
